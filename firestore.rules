@@ -1,0 +1,23 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Temporary local-login rules: Firebase Auth is disabled in the app login flow.
+    // Supervisor/Tech permissions are enforced by the app UI until Firebase Auth is re-enabled.
+    function isAppDataCollection(collectionName) {
+      return collectionName == "equipment"
+        || collectionName == "procedures"
+        || collectionName == "workflowCards"
+        || collectionName == "worksheetImports"
+        || collectionName == "activities";
+    }
+
+    match /{collectionName}/{documentId} {
+      allow read, write: if isAppDataCollection(collectionName);
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

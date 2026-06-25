@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.vercel/
+.pnpm-store/
+pnpm-lock.yaml
+.env
+.env.local
