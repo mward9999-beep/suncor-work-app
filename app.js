@@ -10,6 +10,7 @@ import { localLoginAccounts } from "./firebase-config.js";
 const STORAGE_KEY = "maintenance-control-center-v1";
 const LOCAL_SESSION_KEY = "maintenance-local-session-v1";
 const THEME_KEY = "maintenance-theme-v1";
+const APP_VERSION_LABEL = "Version 1.1 - delete button update";
 const ROLE_PERMISSIONS = {
   supervisor: new Set([
     "viewDashboard",
@@ -616,6 +617,29 @@ function toggleTheme() {
   const nextTheme = currentTheme === "dark" ? "light" : "dark";
   saveTheme(nextTheme);
   applyTheme(nextTheme);
+}
+
+function renderAppVersionLabel() {
+  const footer = document.querySelector(".sidebar-footer");
+  if (!footer) return;
+
+  let versionLabel = document.querySelector("#app-version-label");
+  if (!versionLabel) {
+    versionLabel = document.createElement("div");
+    versionLabel.id = "app-version-label";
+    versionLabel.style.marginTop = "10px";
+    versionLabel.style.padding = "9px 10px";
+    versionLabel.style.border = "1px solid var(--border)";
+    versionLabel.style.borderRadius = "12px";
+    versionLabel.style.color = "var(--muted)";
+    versionLabel.style.fontFamily = '"IBM Plex Mono", monospace';
+    versionLabel.style.fontSize = "11px";
+    versionLabel.style.letterSpacing = "0.02em";
+    versionLabel.style.textAlign = "center";
+    footer.appendChild(versionLabel);
+  }
+
+  versionLabel.textContent = APP_VERSION_LABEL;
 }
 
 function signInWithLocalAccount(usernameOrEmail, password) {
@@ -2149,6 +2173,7 @@ async function loadCloudState() {
 
 async function bootstrapFirebase() {
   applyTheme();
+  renderAppVersionLabel();
   injectIcons();
   updateClock();
   setInterval(updateClock, 30000);
